@@ -1,4 +1,5 @@
 import pygame
+from dino_runner.components.dinosaour import Dinosaour
 
 from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS
 
@@ -9,6 +10,7 @@ class Game:
         pygame.display.set_caption(TITLE)
         pygame.display.set_icon(ICON)
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        self.player = Dinosaour()
         self.clock = pygame.time.Clock()
         self.playing = False
         self.game_speed = 20
@@ -30,12 +32,15 @@ class Game:
                 self.playing = False
 
     def update(self):
-        pass
+        user_input = pygame.key.get_pressed()
+        self.player.update(user_input)
+
 
     def draw(self):
         self.clock.tick(FPS)
         self.screen.fill((255, 255, 255))
         self.draw_background()
+        self.player.draw(self.screen)
         pygame.display.update()
         pygame.display.flip()
 
