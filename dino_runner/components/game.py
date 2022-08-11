@@ -21,6 +21,7 @@ class Game:
         self.y_pos_bg = 380
         self.points = 0
         self.death_count = 0
+        self.points_record = 0 #para guardar el último puntaje obtenido
 
     def execute(self):  
         self.running = True
@@ -79,12 +80,16 @@ class Game:
             self.x_pos_bg = 0
         self.x_pos_bg -= self.game_speed
 
-    def draw_score(self):
-        font = pygame.font.Font(FONT_STYLE, 22)
-        text = font.render(f"Points: {self.points}", True, (0,0,0)) #change color
+    def get_text(self, font_size, message, width, height):
+        font = pygame.font.Font(FONT_STYLE, font_size)
+        text = font.render(message, True, (232, 233, 243)) #change color
         text_rect = text.get_rect()
-        text_rect.center = (1000, 50)
-        self.screen.blit(text, text_rect)
+        text_rect.center = (width, height)
+        self.screen.blit(text, text_rect) #no funciona si no le pongo esto más en la función :c
+
+    def draw_score(self):
+        message = f"Points: {self.points}"
+        self.get_text(22, message, 1000, 50)
 
     def handle_key_events_on_menu(self):
         for event in pygame.event.get():
@@ -97,20 +102,25 @@ class Game:
 
 
     def show_menu(self):
-        self.screen.fill((255,255,255)) #Change color
+        self.screen.fill((231, 107, 116)) #Change color 
         half_screen_height = SCREEN_HEIGHT//2
         half_screen_width = SCREEN_WIDTH//2
         
         if self.death_count == 0:
-            font = pygame.font.Font(FONT_STYLE, 30)
-            text = font.render("Press any Key to start", True, (0,0,0)) #change color
-            text_rect = text.get_rect()
-            text_rect.center = (half_screen_width, half_screen_height)
-            self.screen.blit(text, text_rect)
+            message = "Press any Key to start"
+            self.get_text(30, message, half_screen_width, half_screen_height)
+            
         elif self.death_count > 0:
             #tarea
             #mostrar mensaje para reiniciar, puntos actuales, conteo de muertes
-            pass
+            message = "If you want to play again, press any key"
+            self.get_text(22, message, half_screen_width , 350)
+
+            message_points = f"You got {self.points_record} points in your last try"
+            self.get_text(18, message_points, half_screen_width, 400)
+
+            message_deaths = f"You have died {self.death_count} times since you started"
+            self.get_text(18, message_deaths, half_screen_width, 430)
 
         self.screen.blit(RUNNING[0], (half_screen_width -20, half_screen_height - 140))
         pygame.display.update()

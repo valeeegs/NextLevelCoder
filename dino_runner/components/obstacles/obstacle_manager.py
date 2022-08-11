@@ -18,6 +18,8 @@ class ObstacleManager:
                 pygame.time.delay(800)
                 game.playing = False
                 game.death_count += 1
+                game.points_record = game.points
+                game.points = 0 #reinicia los puntos
                 break
     
     def draw(self, screen):
