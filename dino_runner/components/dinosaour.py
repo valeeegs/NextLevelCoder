@@ -90,7 +90,7 @@ class Dinosaour(Sprite):
         if self.shield:
             time_to_show = round((self.power_up_time_up - pygame.time.get_ticks())/1000, 2)
             if time_to_show >= 0 and self.show_text:
-                get_text(f"Shield enabled for {time_to_show}", screen, 18, 500, 40)
+                get_text(f"Shield enabled for {time_to_show}", screen, 18, 500, 40, (39, 10, 53))
             else:
                 self.shield = False
                 self.type = DEFAULT_TYPE
@@ -98,7 +98,7 @@ class Dinosaour(Sprite):
         if self.hammer:
             time_to_show = round((self.power_up_time_up - pygame.time.get_ticks())/1000, 2)
             if time_to_show >= 0 and self.show_text:
-                get_text(f"Hammer enabled for {time_to_show}", screen, 18, 500, 40)
+                get_text(f"Hammer enabled for {time_to_show}", screen, 18, 500, 40, (56, 71, 71))
             else:
                 self.hammer = False
                 self.type = DEFAULT_TYPE

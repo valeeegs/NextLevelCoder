@@ -1,9 +1,7 @@
 import pygame
 import random
-from pygame.surface import Surface
 from dino_runner.components.obstacles.cactus import Cactus
 from dino_runner.components.obstacles.bird import Bird
-from dino_runner.components.get_text import get_text
 
 class ObstacleManager:
     def __init__(self):

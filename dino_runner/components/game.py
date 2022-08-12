@@ -4,7 +4,7 @@ from dino_runner.components.obstacles.obstacle_manager import ObstacleManager
 from dino_runner.components.powerups.power_up_manager import PowerUpMAnager
 from dino_runner.components.get_text import get_text
 
-from dino_runner.utils.constants import BG, ICON, RUNNING, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS
+from dino_runner.utils.constants import BG, DINO_START, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS
 
 
 class Game:
@@ -31,7 +31,7 @@ class Game:
         while self.running:
             if not self.playing:
                 self.show_menu()
-
+    
         pygame.display.quit()
         pygame.quit()
 
@@ -48,6 +48,7 @@ class Game:
             self.draw()
         
     def events(self):
+        #exit = pygame.key.get_pressed()[pygame.K_ESCAPE]
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.playing = False
@@ -55,7 +56,6 @@ class Game:
 
     def update(self):
         self.update_score()
-        #self.player.check_invicibility(self.screen)
         user_input = pygame.key.get_pressed()
         self.player.update(user_input)
         self.obstacle_manager.update(self) #la instancia de la clase
@@ -100,11 +100,18 @@ class Game:
                 self.running = False
                 pygame.display.quit()
             if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    self.playing = False
+                    self.running = False
+                    pygame.display.quit()
+                    break
                 self.run()
+            
+                    
 
 
     def show_menu(self):
-        self.screen.fill((231, 107, 116)) #Change color 
+        self.screen.fill((232, 233, 243)) #Change color 
         half_screen_height = SCREEN_HEIGHT//2
         half_screen_width = SCREEN_WIDTH//2
         
@@ -124,6 +131,9 @@ class Game:
             message_deaths = f"You have died {self.death_count} times since you started"
             get_text(message_deaths, self.screen, 18, half_screen_width, 430)
 
-        self.screen.blit(RUNNING[0], (half_screen_width -20, half_screen_height - 140))
+            message_exit= "If you want to exit the game, press ESC"
+            get_text(message_exit, self.screen, 15, half_screen_width, 460, (12, 4, 16))
+
+        self.screen.blit(DINO_START, (half_screen_width-45, half_screen_height - 140))
         pygame.display.update()
         self.handle_key_events_on_menu()
