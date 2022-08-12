@@ -24,7 +24,7 @@ class PowerUpMAnager:
                 player.shield = True
                 player.show_text = True
                 player.type = power_up.type
-                time_random = random.randint(5,8)
+                time_random = random.randint(5, 8)
                 player.shield_time_up = power_up.start_time + (time_random * 1000)
                 self.power_ups.remove(power_up)
 

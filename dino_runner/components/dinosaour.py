@@ -21,19 +21,17 @@ class Dinosaour(Sprite):
         self.dino_rect.x = self.X_POS
         self.dino_rect.y = self.Y_POS
         self.step_index = 0 #para mostrar que patita se levanta 
+        self.dino_duck = False
         self.dino_run = True
         self.dino_jump = False
         self.jum_vel = self.JUM_VEL
-        self.dino_duck = False
         self.setup_state()
-
-        
+       
     def setup_state(self):
         self.has_power_up = False
         self.shield = False
         self.show_text = False
         self.shied_time_up = 0
-
 
     def update(self, user_input):#
         if self.dino_run:
@@ -46,20 +44,20 @@ class Dinosaour(Sprite):
         if user_input[pygame.K_UP] and not self.dino_jump:
             self.dino_jump = True
             self.dino_run = False
+            self.dino_duck = False
         elif user_input[pygame.K_DOWN] and not self.dino_jump:
-            self.dino_duck = True
             self.dino_run = False
-        elif not self.dino_jump: 
+            self.dino_duck = True
+            self.dino_jump = False
+        elif not self.dino_jump and not self.dino_duck: 
             #no menciono los tres antes ya que no cambian de estado y no es necesario volver a colocar lo mismo
             #pero ambos llegana quí cuando dejan de presionar alguna tecla, entonces es necesario
             self.dino_jump = False
-            self.dino_run = True
             self.dino_duck = False
-
+            self.dino_run = True
 
         if self.step_index >= 9:
             self.step_index = 0
-        
 
     def run(self):
         self.image = RUN_IMG[self.type][self.step_index//5]

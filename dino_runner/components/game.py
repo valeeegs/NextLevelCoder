@@ -18,7 +18,7 @@ class Game:
         self.obstacle_manager =  ObstacleManager()
         self.power_up_manager = PowerUpMAnager()
         self.playing = False
-        self.running = True
+        self.running = False
         self.game_speed = 20
         self.x_pos_bg = 0
         self.y_pos_bg = 380
@@ -40,12 +40,13 @@ class Game:
         self.obstacle_manager.reset_obstacles()
         self.power_up_manager.reset_power_ups()
         self.playing = True
+        self.game_speed = 20
+        self.points = 0
         while self.playing:
             self.events()
             self.update()
             self.draw()
         
-
     def events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -71,11 +72,11 @@ class Game:
         self.clock.tick(FPS) 
         self.screen.fill((255, 255, 255))
         self.draw_background()
+        self.draw_score()
         self.player.draw(self.screen)
         self.player.check_invicibility(self.screen)
         self.obstacle_manager.draw(self.screen)
         self.power_up_manager.draw(self.screen)
-        self.draw_score()
         pygame.display.update()
         pygame.display.flip()
 
