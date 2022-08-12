@@ -1,7 +1,9 @@
 import pygame
 import random
+from pygame.surface import Surface
 from dino_runner.components.obstacles.cactus import Cactus
 from dino_runner.components.obstacles.bird import Bird
+from dino_runner.components.get_text import get_text
 
 class ObstacleManager:
     def __init__(self):
@@ -9,15 +11,18 @@ class ObstacleManager:
 
     def update(self, game):
         if len(self.obstacles) == 0:
-            cactus_type = "SMALL" if random.randint(0,1) == 0 else "LARGE"
-            self.obstacles.append(Cactus(cactus_type))
-            #self.obstacles.append(Bird())
+            if random.randint(0,1) == 0: 
+                cactus_type = "SMALL" if random.randint(0,1) == 0 else "LARGE"
+                self.obstacles.append(Cactus(cactus_type))
+            else:
+                bird_type = 0 if random.randint(0,1) == 0 else 1 #para que aparezca volando diferente
+                self.obstacles.append(Bird(bird_type))
             
 
         for obstacle in self.obstacles:
             obstacle.update(game.game_speed, self.obstacles)
             if game.player.dino_rect.colliderect(obstacle.rect):
-                if not game.player.shield:
+                if not game.player.shield and not game.player.hammer:
                     pygame.time.delay(800)
                     game.playing = False
                     game.death_count += 1

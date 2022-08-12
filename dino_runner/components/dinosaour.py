@@ -1,12 +1,12 @@
 from unittest.mock import DEFAULT
 import pygame
-from dino_runner.utils.constants import DUCKING, RUNNING, JUMPING, RUNNING_SHIELD, DEFAULT_TYPE, SHIELD_TYPE, DUCKING_SHIELD, JUMPING_SHIELD
+from dino_runner.utils.constants import DUCKING, DUCKING_HAMMER, HAMMER_TYPE, JUMPING_HAMMER, RUNNING, JUMPING, RUNNING_HAMMER, RUNNING_SHIELD, DEFAULT_TYPE, SHIELD_TYPE, DUCKING_SHIELD, JUMPING_SHIELD
 from pygame.sprite import Sprite
 from dino_runner.components.get_text import get_text
 
-RUN_IMG = { DEFAULT_TYPE: RUNNING, SHIELD_TYPE: RUNNING_SHIELD}
-JUMP_IMG = { DEFAULT_TYPE: JUMPING, SHIELD_TYPE: JUMPING_SHIELD}
-DUCK_IMG = { DEFAULT_TYPE: DUCKING, SHIELD_TYPE: DUCKING_SHIELD}
+RUN_IMG = { DEFAULT_TYPE: RUNNING, SHIELD_TYPE: RUNNING_SHIELD, HAMMER_TYPE: RUNNING_HAMMER}
+JUMP_IMG = { DEFAULT_TYPE: JUMPING, SHIELD_TYPE: JUMPING_SHIELD, HAMMER_TYPE: JUMPING_HAMMER}
+DUCK_IMG = { DEFAULT_TYPE: DUCKING, SHIELD_TYPE: DUCKING_SHIELD, HAMMER_TYPE: DUCKING_HAMMER}
 
 class Dinosaour(Sprite):
     X_POS = 80
@@ -31,7 +31,8 @@ class Dinosaour(Sprite):
         self.has_power_up = False
         self.shield = False
         self.show_text = False
-        self.shied_time_up = 0
+        self.power_up_time_up = 0
+        self.hammer = False
 
     def update(self, user_input):#
         if self.dino_run:
@@ -87,11 +88,19 @@ class Dinosaour(Sprite):
 
     def check_invicibility(self, screen):
         if self.shield:
-            time_to_show = round((self.shied_time_up - pygame.time.get_ticks())/1000, 2)
+            time_to_show = round((self.power_up_time_up - pygame.time.get_ticks())/1000, 2)
             if time_to_show >= 0 and self.show_text:
                 get_text(f"Shield enabled for {time_to_show}", screen, 18, 500, 40)
             else:
                 self.shield = False
+                self.type = DEFAULT_TYPE
+
+        if self.hammer:
+            time_to_show = round((self.power_up_time_up - pygame.time.get_ticks())/1000, 2)
+            if time_to_show >= 0 and self.show_text:
+                get_text(f"Hammer enabled for {time_to_show}", screen, 18, 500, 40)
+            else:
+                self.hammer = False
                 self.type = DEFAULT_TYPE
 
 

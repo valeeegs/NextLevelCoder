@@ -3,17 +3,18 @@ from dino_runner.components.obstacles.obstacle import Obstacle
 from dino_runner.utils.constants import BIRD
 
 class Bird(Obstacle):
-    def __init__(self):
-        self.image = BIRD[0]
+    def __init__(self, type):
+        self.type = type
+        self.image = BIRD
+        super().__init__(self.image, self.type)
+        self.rect.y = 265
         self.fly_index = 0
-        self.type = 1
-        super().__init__(self.fly(), self.type)
-        self.rect.y = 100
-
-    def fly(self):
-        self.image = BIRD[0] if self.step_index < 5 else BIRD[1]
+    
+    def draw(self, screen):
+        if self.fly_index >= 9:
+            self.fly_index = 0
+        
+        screen.blit(self.image[self.fly_index//5], self.rect)
         self.fly_index += 1
 
-        if self.fly_index >= 10:
-            self.fly_index = 0
-
+        
