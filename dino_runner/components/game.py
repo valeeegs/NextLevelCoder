@@ -1,9 +1,11 @@
 import pygame
 from dino_runner.components.dinosaour import Dinosaour
 from dino_runner.components.obstacles.obstacle_manager import ObstacleManager
+from dino_runner.components.powerups.power_up_manager import PowerUpMAnager
+from dino_runner.components.get_text import get_text
 
 from dino_runner.utils.constants import BG, ICON, RUNNING, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS
-FONT_STYLE = 'freesansbold.ttf'
+
 
 class Game:
     def __init__(self):
@@ -11,9 +13,10 @@ class Game:
         pygame.display.set_caption(TITLE)
         pygame.display.set_icon(ICON)
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        self.clock = pygame.time.Clock()
         self.player = Dinosaour()
         self.obstacle_manager =  ObstacleManager()
-        self.clock = pygame.time.Clock()
+        self.power_up_manager = PowerUpMAnager()
         self.playing = False
         self.running = True
         self.game_speed = 20
@@ -35,6 +38,7 @@ class Game:
     def run(self):
         # Game loop: events - update - draw
         self.obstacle_manager.reset_obstacles()
+        self.power_up_manager.reset_power_ups()
         self.playing = True
         while self.playing:
             self.events()
@@ -50,9 +54,11 @@ class Game:
 
     def update(self):
         self.update_score()
+        #self.player.check_invicibility(self.screen)
         user_input = pygame.key.get_pressed()
         self.player.update(user_input)
         self.obstacle_manager.update(self) #la instancia de la clase
+        self.power_up_manager.update(self.points, self.game_speed, self.player)
 
     def update_score(self):
         #incrementar putnso y velocidad cada 100 puntos
@@ -62,11 +68,13 @@ class Game:
 
 
     def draw(self):
-        self.clock.tick(FPS)
+        self.clock.tick(FPS) 
         self.screen.fill((255, 255, 255))
         self.draw_background()
         self.player.draw(self.screen)
+        self.player.check_invicibility(self.screen)
         self.obstacle_manager.draw(self.screen)
+        self.power_up_manager.draw(self.screen)
         self.draw_score()
         pygame.display.update()
         pygame.display.flip()
@@ -80,16 +88,9 @@ class Game:
             self.x_pos_bg = 0
         self.x_pos_bg -= self.game_speed
 
-    def get_text(self, font_size, message, width, height):
-        font = pygame.font.Font(FONT_STYLE, font_size)
-        text = font.render(message, True, (232, 233, 243)) #change color
-        text_rect = text.get_rect()
-        text_rect.center = (width, height)
-        self.screen.blit(text, text_rect) #no funciona si no le pongo esto más en la función :c
-
     def draw_score(self):
         message = f"Points: {self.points}"
-        self.get_text(22, message, 1000, 50)
+        get_text(message, self.screen, 22, 1000, 50)
 
     def handle_key_events_on_menu(self):
         for event in pygame.event.get():
@@ -108,19 +109,19 @@ class Game:
         
         if self.death_count == 0:
             message = "Press any Key to start"
-            self.get_text(30, message, half_screen_width, half_screen_height)
+            get_text(message, self.screen, 30, half_screen_width, half_screen_height)
             
         elif self.death_count > 0:
             #tarea
             #mostrar mensaje para reiniciar, puntos actuales, conteo de muertes
             message = "If you want to play again, press any key"
-            self.get_text(22, message, half_screen_width , 350)
+            get_text(message, self.screen, 22, half_screen_width , 350)
 
             message_points = f"You got {self.points_record} points in your last try"
-            self.get_text(18, message_points, half_screen_width, 400)
+            get_text(message_points, self.screen, 18, half_screen_width, 400)
 
             message_deaths = f"You have died {self.death_count} times since you started"
-            self.get_text(18, message_deaths, half_screen_width, 430)
+            get_text(message_deaths, self.screen, 18, half_screen_width, 430)
 
         self.screen.blit(RUNNING[0], (half_screen_width -20, half_screen_height - 140))
         pygame.display.update()
