@@ -104,11 +104,9 @@ class Game:
                     self.playing = False
                     self.running = False
                     pygame.display.quit()
-                    break
+                    break #########
                 self.run()
             
-                    
-
 
     def show_menu(self):
         self.screen.fill((232, 233, 243)) #Change color 
@@ -129,11 +127,11 @@ class Game:
             get_text(message_points, self.screen, 18, half_screen_width, 400)
 
             message_deaths = f"You have died {self.death_count} times since you started"
-            get_text(message_deaths, self.screen, 18, half_screen_width, 430)
+            get_text(message_deaths, self.screen, 18, half_screen_width, 430, (88, 20, 24))
 
             message_exit= "If you want to exit the game, press ESC"
             get_text(message_exit, self.screen, 15, half_screen_width, 460, (12, 4, 16))
 
-        self.screen.blit(DINO_START, (half_screen_width-45, half_screen_height - 140))
+        self.screen.blit(DINO_START, (half_screen_width-45, half_screen_height - 140)) ###
         pygame.display.update()
         self.handle_key_events_on_menu()

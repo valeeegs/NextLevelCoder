@@ -31,7 +31,7 @@ class PowerUpMAnager:
                     player.show_text = True
                 player.type = power_up.type
                 time_random = random.randint(5, 8)
-                player.power_up_time_up = power_up.start_time + (time_random * 1000)
+                player.power_up_time_up = power_up.start_time + (time_random * 1000) ###
                 self.power_ups.remove(power_up)
 
     def draw(self, screen):
